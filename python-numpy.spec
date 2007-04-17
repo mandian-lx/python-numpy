@@ -1,7 +1,7 @@
 %define module	numpy
 %define name 	python-%{module}
-%define version 1.0.1
-%define release 2
+%define version 1.0.2
+%define release 1
 
 Summary:	Python array processing for numbers, strings, records, and objects
 Name: 		%{name}
@@ -14,8 +14,8 @@ Group: 		Development/Python
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Url: 		http://numeric.scipy.org
 Requires:	python >= 2.0
-BuildRequires:	python-devel gcc-gfortran >= 4.0
-BuildRequires:  gcc >= 4.0
+BuildRequires:	python-devel >= 2.0
+BuildRequires:  gcc >= 4.0, gcc-gfortran >= 4.0
 Provides:	f2py
 Obsoletes:	f2py
 
@@ -76,5 +76,3 @@ CFLAGS="$RPM_OPT_FLAGS -fPIC" %__python setup.py config_fc --fcompiler=gnu95 bui
 %files devel -f INSTALLED_FILES_DEVEL
 %defattr(-,root,root,-)
 %doc *.txt
-
-
