@@ -1,6 +1,6 @@
 %define module	numpy
 %define name 	python-%{module}
-%define version 1.0.2
+%define version 1.0.3
 %define release 1
 
 Summary:	Python array processing for numbers, strings, records, and objects
