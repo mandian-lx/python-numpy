@@ -1,7 +1,7 @@
 %define module	numpy
 %define name 	python-%{module}
 %define version 1.0.3.1
-%define release 1
+%define release 2
 
 Summary:	Python array processing for numbers, strings, records, and objects
 Name: 		%{name}
@@ -12,9 +12,9 @@ Patch0:		system_info.py.patch
 License: 	BSD
 Group: 		Development/Python
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
-Url: 		http://numeric.scipy.org
+Url: 		http://numpy.scipy.org
 Requires:	python >= 2.0
-BuildRequires:	python-devel >= 2.0
+BuildRequires:	python-devel >= 2.0, blas-devel, lapack-devel
 BuildRequires:  gcc >= 4.0, gcc-gfortran >= 4.0
 Provides:	f2py
 Obsoletes:	f2py
