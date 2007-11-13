@@ -1,14 +1,13 @@
 %define module	numpy
 %define name 	python-%{module}
-%define version 1.0.3.1
-%define release 2
+%define version 1.0.4
+%define release 1
 
 Summary:	Python array processing for numbers, strings, records, and objects
 Name: 		%{name}
 Version: 	%{version}
 Release: 	%mkrel %{release}
 Source0: 	%{module}-%{version}.tar.bz2
-Patch0:		system_info.py.patch
 License: 	BSD
 Group: 		Development/Python
 BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
@@ -40,7 +39,6 @@ Install this if you need to access the numpy C bindings.
 
 %prep
 %setup -q -n %{module}-%{version}
-%patch0 -p0
 
 %build
 CFLAGS="$RPM_OPT_FLAGS -fPIC" %__python setup.py config_fc --fcompiler=gnu95 build
