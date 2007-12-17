@@ -10,7 +10,6 @@ Release: 	%mkrel %{release}
 Source0: 	%{module}-%{version}.tar.bz2
 License: 	BSD
 Group: 		Development/Python
-BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Url: 		http://numpy.scipy.org
 Requires:	python >= 2.0
 BuildRequires:	python-devel >= 2.0, blas-devel, lapack-devel
