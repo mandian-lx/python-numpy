@@ -30,7 +30,7 @@ There are also basic facilities for discrete fourier transform,
 basic linear algebra and random number generation.
 
 %package  devel
-Summary:  numpy library C bindings
+Summary:  Numpy library C bindings
 Group: 	  Development/Python
 Requires: %{name} = %{version}
 
