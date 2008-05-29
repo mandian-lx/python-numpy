@@ -1,22 +1,21 @@
 %define module	numpy
-%define name 	python-%{module}
-%define version 1.0.4
-%define release 1
 
 Summary:	Python array processing for numbers, strings, records, and objects
-Name: 		%{name}
-Version: 	%{version}
-Release: 	%mkrel %{release}
-Source0: 	%{module}-%{version}.tar.bz2
-License: 	BSD
-Group: 		Development/Python
-BuildRoot: 	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+Name:		python-%{module}
+Version:	1.1.0
+Release:	%mkrel 1
+License:	BSD
+Group:		Development/Python
 Url: 		http://numpy.scipy.org
+Source0:	http://downloads.sourceforge.net/numpy/%{module}-%{version}.tar.bz2
 Requires:	python >= 2.0
-BuildRequires:	python-devel >= 2.0, blas-devel, lapack-devel
-BuildRequires:  gcc >= 4.0, gcc-gfortran >= 4.0
+BuildRequires:	python-devel >= 2.0
+BuildRequires:	blas-devel
+BuildRequires:	lapack-devel
+BuildRequires:	gcc-gfortran >= 4.0
 Provides:	f2py
 Obsoletes:	f2py
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 
 %description
 Numpy is a general-purpose array-processing package designed to
@@ -29,10 +28,10 @@ create arrays of arbitrary type.
 There are also basic facilities for discrete fourier transform,
 basic linear algebra and random number generation.
 
-%package  devel
-Summary:  Numpy library C bindings
-Group: 	  Development/Python
-Requires: %{name} = %{version}
+%package devel
+Summary:	Numpy library C bindings
+Group:		Development/Python
+Requires:	%{name} = %{version}-%{release}
 
 %description devel
 Install this if you need to access the numpy C bindings.
@@ -41,14 +40,14 @@ Install this if you need to access the numpy C bindings.
 %setup -q -n %{module}-%{version}
 
 %build
-CFLAGS="$RPM_OPT_FLAGS -fPIC" %__python setup.py config_fc --fcompiler=gnu95 build
+CFLAGS="%{optflags} -fPIC" %{__python} setup.py config_fc --fcompiler=gnu95 build
 
 %install
 %__rm -rf %{buildroot}
 
 # Don't use --skip-build because it will cause some files to be left out of 
 # the file list:
-%__python setup.py install --root=%{buildroot} --record=INSTALLED_FILES_ORIG.tmp
+%{__python} setup.py install --root=%{buildroot} --record=INSTALLED_FILES_ORIG.tmp
 
 # Don't include original test files and ghost optimized bytecode files:
 %__grep -Ev "\\.orig$" INSTALLED_FILES_ORIG.tmp | %__sed 's/\(.*\.pyo\)/%ghost \1/' > INSTALLED_FILES.tmp
