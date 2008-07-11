@@ -3,7 +3,7 @@
 Summary:	Python array processing for numbers, strings, records, and objects
 Name:		python-%{module}
 Version:	1.1.0
-Release:	%mkrel 1
+Release:	%mkrel 2
 License:	BSD
 Group:		Development/Python
 Url: 		http://numpy.scipy.org
