@@ -2,14 +2,14 @@
 
 Summary:	Python array processing for numbers, strings, records, and objects
 Name:		python-%{module}
-Version:	1.1.1
+Version:	1.2.0
 Release:	%mkrel 1
 License:	BSD
 Group:		Development/Python
 Url: 		http://numpy.scipy.org
 Source0:	http://downloads.sourceforge.net/numpy/%{module}-%{version}.tar.lzma
-Requires:	python >= 2.3
-BuildRequires:	python-devel >= 2.3
+Requires:	python >= 2.4
+BuildRequires:	python-devel >= 2.4
 BuildRequires:	blas-devel
 BuildRequires:	lapack-devel
 BuildRequires:	gcc-gfortran >= 4.0
