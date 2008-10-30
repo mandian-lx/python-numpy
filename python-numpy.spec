@@ -2,7 +2,7 @@
 
 Summary:	Python array processing for numbers, strings, records, and objects
 Name:		python-%{module}
-Version:	1.2.0
+Version:	1.2.1
 Release:	%mkrel 1
 License:	BSD
 Group:		Development/Python
