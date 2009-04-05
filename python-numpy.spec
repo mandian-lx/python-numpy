@@ -1,9 +1,14 @@
 %define module	numpy
+%define name	python-%{module}
+%define version 1.3.0
+%define release %mkrel 1
+%define epoch 	1
 
 Summary:	Python array processing for numbers, strings, records, and objects
 Name:		python-%{module}
-Version:	1.3.0b1
-Release:	%mkrel 1
+Version:	%{version}
+Epoch:		%{epoch}
+Release:	%{release}
 License:	BSD
 Group:		Development/Python
 Url: 		http://numpy.scipy.org
@@ -30,7 +35,7 @@ basic Fourier transforms, and random number generation.
 %package devel
 Summary:	Numpy library C bindings
 Group:		Development/Python
-Requires:	%{name} = %{version}-%{release}
+Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description devel
 Install this if you need to access the Numpy C bindings.
