@@ -44,7 +44,7 @@ Install this if you need to access the Numpy C bindings.
 %setup -q -n %{module}-%{version}
 
 %build
-CFLAGS="%{optflags} -fPIC" %{__python} setup.py config_fc --fcompiler=gnu95 build
+CFLAGS="%{optflags} -fPIC -O3" %{__python} setup.py config_fc --fcompiler=gnu95 build
 
 %install
 %__rm -rf %{buildroot}
