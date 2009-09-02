@@ -1,7 +1,7 @@
 %define module	numpy
 %define name	python-%{module}
 %define version 1.3.0
-%define release %mkrel 1
+%define release %mkrel 2
 %define epoch 	1
 
 Summary:	Python array processing for numbers, strings, records, and objects
@@ -13,6 +13,7 @@ License:	BSD
 Group:		Development/Python
 Url: 		http://numpy.scipy.org
 Source0:	http://downloads.sourceforge.net/numpy/%{module}-%{version}.tar.gz
+Suggests:	python-nose
 BuildRequires:	blas-devel
 BuildRequires:	lapack-devel
 BuildRequires:	gcc-gfortran >= 4.0
