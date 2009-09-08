@@ -1,7 +1,7 @@
 %define module	numpy
 %define name	python-%{module}
 %define version 1.3.0
-%define release %mkrel 2
+%define release %mkrel 3
 %define epoch 	1
 
 Summary:	Python array processing for numbers, strings, records, and objects
@@ -13,14 +13,17 @@ License:	BSD
 Group:		Development/Python
 Url: 		http://numpy.scipy.org
 Source0:	http://downloads.sourceforge.net/numpy/%{module}-%{version}.tar.gz
-Suggests:	python-nose
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+Provides:	f2py
+Obsoletes:	f2py
 BuildRequires:	blas-devel
 BuildRequires:	lapack-devel
 BuildRequires:	gcc-gfortran >= 4.0
 %py_requires -d
-Provides:	f2py
-Obsoletes:	f2py
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+# These are needed to run the numpy tests:
+Suggests:	python-nose
+Suggests:	python-devel
+
 
 %description
 Numpy is a general-purpose array-processing package designed to
@@ -73,7 +76,7 @@ CFLAGS="%{optflags} -fPIC -O3" %{__python} setup.py config_fc --fcompiler=gnu95 
 
 %files -f FILELIST
 %defattr(-,root,root)
-%doc *.txt
+%doc *.txt 
 
 %files devel -f FILELIST_DEVEL
 %defattr(-,root,root,-)
