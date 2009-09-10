@@ -1,7 +1,7 @@
 %define module	numpy
 %define name	python-%{module}
 %define version 1.3.0
-%define release %mkrel 3
+%define release %mkrel 4
 %define epoch 	1
 
 Summary:	Python array processing for numbers, strings, records, and objects
@@ -20,10 +20,8 @@ BuildRequires:	blas-devel
 BuildRequires:	lapack-devel
 BuildRequires:	gcc-gfortran >= 4.0
 %py_requires -d
-# These are needed to run the numpy tests:
+# Needed to run the numpy tests:
 Suggests:	python-nose
-Suggests:	python-devel
-
 
 %description
 Numpy is a general-purpose array-processing package designed to
