@@ -26,9 +26,8 @@ BuildRequires:	blas-devel
 %endif
 BuildRequires:	lapack-devel
 BuildRequires:	gcc-gfortran >= 4.0
+BuildRequires:	python-nose
 %py_requires -d
-# Needed to run the numpy tests:
-Suggests:	python-nose
 
 %description
 Numpy is a general-purpose array-processing package designed to
@@ -73,7 +72,7 @@ CFLAGS="%{optflags} -fPIC -O3" %{__python} setup.py install --root=%{buildroot}
 %check
 # Don't run tests from within main directory to avoid importing the uninstalled numpy stuff:
 pushd doc &> /dev/null
-PYTHONPATH="%{buildroot}%{py_platsitedir}" %{__python} -c "import pkg_resources, numpy; numpy.test()"
+PYTHONPATH="%{buildroot}%{py_platsitedir}" %{__python} -c "import numpy; numpy.test()"
 popd &> /dev/null
 
 %clean
