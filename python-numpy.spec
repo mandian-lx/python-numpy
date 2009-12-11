@@ -1,10 +1,13 @@
+%define enable_atlas 1
+%{?_with_atlas: %global enable_atlas 1}
+
 %define module	numpy
 %define name	python-%{module}
 %define version 1.3.0
-%define release %mkrel 4
+%define release %mkrel 5
 %define epoch 	1
 
-Summary:	Python array processing for numbers, strings, records, and objects
+Summary:	A fast multidimensional array facility for Python
 Name:		python-%{module}
 Version:	%{version}
 Epoch:		%{epoch}
@@ -16,7 +19,11 @@ Source0:	http://downloads.sourceforge.net/numpy/%{module}-%{version}.tar.gz
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Provides:	f2py
 Obsoletes:	f2py
+%if %enable_atlas
+BuildRequires:	libatlas-devel
+%else
 BuildRequires:	blas-devel
+%endif
 BuildRequires:	lapack-devel
 BuildRequires:	gcc-gfortran >= 4.0
 %py_requires -d
@@ -35,12 +42,13 @@ Numpy also provides facilities for basic linear algebra routines,
 basic Fourier transforms, and random number generation.
 
 %package devel
-Summary:	Numpy library C bindings
+Summary:	Numpy headers and development tools
 Group:		Development/Python
 Requires:	%{name} = %{epoch}:%{version}-%{release}
 
 %description devel
-Install this if you need to access the Numpy C bindings.
+This package contains tools and header files need to develop modules 
+in C and Fortran that can interact with Numpy
 
 %prep
 %setup -q -n %{module}-%{version}
@@ -50,32 +58,54 @@ CFLAGS="%{optflags} -fPIC -O3" %{__python} setup.py config_fc --fcompiler=gnu95 
 
 %install
 %__rm -rf %{buildroot}
+CFLAGS="%{optflags} -fPIC -O3" %{__python} setup.py install --root=%{buildroot} 
 
-# Don't use --skip-build because it will cause some files to be left out of 
-# the file list:
-%{__python} setup.py install --root=%{buildroot} --record=FILELIST_ORIG.tmp
+%__rm -rf docs-f2py; %__mv %{buildroot}%{py_platsitedir}/%{module}/f2py/docs docs-f2py
+%__mv -f %{buildroot}%{py_platsitedir}/%{module}/f2py/f2py.1 f2py.1
+%__lzma -z f2py.1
+%__install -D -p -m 0644 f2py.1.lzma %{buildroot}%{_mandir}/man1/f2py.1.lzma
 
-# Don't include original test files and ghost optimized bytecode files:
-%__grep -Ev "\\.orig$" FILELIST_ORIG.tmp | %__sed 's/\(.*\.pyo\)/%ghost \1/' > FILELIST.tmp
+# Remove doc files that should be in %doc:
+%__rm -f %{buildroot}%{py_platsitedir}/%{module}/COMPATIBILITY
+%__rm -f %{buildroot}%{py_platsitedir}/%{module}/*.txt
+%__rm -f %{buildroot}%{py_platsitedir}/%{module}/site.cfg.example
 
-# Move development files to multiarch-compliant location:
-%__grep -Ev "include/numpy|\\.h$|\\.c$" FILELIST.tmp > FILELIST
-%__grep -E "include/numpy|\\.h$|\\.c$" FILELIST.tmp > FILELIST_DEVEL
-#%__grep -E "include/numpy|\\.h$|\\.c$" FILELIST.tmp > FILELIST_DEVEL.tmp
-#%__mkdir -p -m 755 %{buildroot}%{multiarch_includedir}/python%{py_ver}/numpy
-#for i in `%__cat FILELIST_DEVEL.tmp`; do
-#   %__mv %{buildroot}$i %{buildroot}%{multiarch_includedir}/python%{py_ver}/numpy
-#   j=`basename $i`
-#   echo %{multiarch_includedir}/python%{py_ver}/numpy/$j >> FILELIST_DEVEL
-#done
+%check
+# Don't run tests from within main directory to avoid importing the uninstalled numpy stuff:
+pushd doc &> /dev/null
+PYTHONPATH="%{buildroot}%{py_platsitedir}" %{__python} -c "import pkg_resources, numpy; numpy.test()"
+popd &> /dev/null
 
 %clean
 %__rm -rf %{buildroot}
 
-%files -f FILELIST
+%files 
 %defattr(-,root,root)
-%doc *.txt 
+%doc LICENSE.txt README.txt THANKS.txt DEV_README.txt COMPATIBILITY site.cfg.example
+%dir %{py_platsitedir}/%{module}
+%{py_platsitedir}/%{module}/*.py*
+%{py_platsitedir}/%{module}/core/ 
+%{py_platsitedir}/%{module}/doc/
+%exclude %{py_platsitedir}/%{module}/core/include/
+%{py_platsitedir}/%{module}/fft/
+%{py_platsitedir}/%{module}/lib/
+%{py_platsitedir}/%{module}/linalg/
+%{py_platsitedir}/%{module}/ma/
+%{py_platsitedir}/%{module}/numarray/
+%exclude %{py_platsitedir}/%{module}/numarray/numpy/
+%{py_platsitedir}/%{module}/oldnumeric/
+%{py_platsitedir}/%{module}/random/
+%exclude %{py_platsitedir}/%{module}/random/randomkit.h
+%{py_platsitedir}/%{module}/testing/
+%{py_platsitedir}/%{module}/tests/ 
+%{py_platsitedir}/%{module}-*.egg-info
 
-%files devel -f FILELIST_DEVEL
+%files devel
 %defattr(-,root,root,-)
-%doc *.txt
+%{_bindir}/f2py
+%{_mandir}/man1/f2py.*
+%{py_platsitedir}/%{module}/core/include/
+%{py_platsitedir}/%{module}/numarray/numpy/
+%{py_platsitedir}/%{module}/distutils/
+%{py_platsitedir}/%{module}/f2py/
+%{py_platsitedir}/%{module}/random/randomkit.h
