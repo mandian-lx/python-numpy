@@ -20,7 +20,11 @@ BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Provides:	f2py
 Obsoletes:	f2py
 %if %enable_atlas
+%ifarch x86_64
+BuildRequires:	libatlas-x86_64-devel
+%else
 BuildRequires:	libatlas-devel
+%endif
 %else
 BuildRequires:	blas-devel
 %endif
