@@ -23,7 +23,7 @@ Obsoletes:	f2py
 %ifarch x86_64
 BuildRequires:	libatlas-x86_64-devel
 %else
-BuildRequires:	libatlas-devel
+BuildRequires:	libatlas-sse2-devel
 %endif
 %else
 BuildRequires:	blas-devel
