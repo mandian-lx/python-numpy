@@ -3,8 +3,8 @@
 
 %define module	numpy
 %define name	python-%{module}
-%define version 1.3.0
-%define release %mkrel 5
+%define version 1.4.0
+%define release %mkrel 1
 %define epoch 	1
 
 Summary:	A fast multidimensional array facility for Python
@@ -84,15 +84,18 @@ popd &> /dev/null
 %dir %{py_platsitedir}/%{module}
 %{py_platsitedir}/%{module}/*.py*
 %{py_platsitedir}/%{module}/core/ 
+%{py_platsitedir}/%{module}/compat/
 %{py_platsitedir}/%{module}/doc/
 %exclude %{py_platsitedir}/%{module}/core/include/
 %{py_platsitedir}/%{module}/fft/
 %{py_platsitedir}/%{module}/lib/
 %{py_platsitedir}/%{module}/linalg/
 %{py_platsitedir}/%{module}/ma/
+%{py_platsitedir}/%{module}/matrixlib/
 %{py_platsitedir}/%{module}/numarray/
 %exclude %{py_platsitedir}/%{module}/numarray/numpy/
 %{py_platsitedir}/%{module}/oldnumeric/
+%{py_platsitedir}/%{module}/polynomial/
 %{py_platsitedir}/%{module}/random/
 %exclude %{py_platsitedir}/%{module}/random/randomkit.h
 %{py_platsitedir}/%{module}/testing/
