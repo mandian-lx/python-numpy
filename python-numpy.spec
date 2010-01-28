@@ -1,4 +1,4 @@
-%define enable_atlas 1
+%define enable_atlas 0
 %{?_with_atlas: %global enable_atlas 1}
 
 %define module	numpy
