@@ -3,7 +3,7 @@
 
 %define module	numpy
 %define name	python-%{module}
-%define version 1.4.0
+%define version 1.4.1
 %define release %mkrel 1
 %define epoch 	1
 
@@ -53,11 +53,11 @@ in C and Fortran that can interact with Numpy
 %setup -q -n %{module}-%{version}
 
 %build
-CFLAGS="%{optflags} -fPIC -O3" %{__python} setup.py config_fc --fcompiler=gnu95 build
+CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= %{__python} setup.py config_fc --fcompiler=gnu95 build
 
 %install
 %__rm -rf %{buildroot}
-CFLAGS="%{optflags} -fPIC -O3" %{__python} setup.py install --root=%{buildroot} 
+CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= %{__python} setup.py install --root=%{buildroot} 
 
 %__rm -rf docs-f2py; %__mv %{buildroot}%{py_platsitedir}/%{module}/f2py/docs docs-f2py
 %__mv -f %{buildroot}%{py_platsitedir}/%{module}/f2py/f2py.1 f2py.1
