@@ -61,8 +61,7 @@ CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= %{__python} setup.py ins
 
 %__rm -rf docs-f2py; %__mv %{buildroot}%{py_platsitedir}/%{module}/f2py/docs docs-f2py
 %__mv -f %{buildroot}%{py_platsitedir}/%{module}/f2py/f2py.1 f2py.1
-%__lzma -z f2py.1
-%__install -D -p -m 0644 f2py.1.lzma %{buildroot}%{_mandir}/man1/f2py.1.lzma
+%__install -D -p -m 0644 f2py.1 %{buildroot}%{_mandir}/man1/f2py.1
 
 # Remove doc files that should be in %doc:
 %__rm -f %{buildroot}%{py_platsitedir}/%{module}/COMPATIBILITY
