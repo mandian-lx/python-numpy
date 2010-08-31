@@ -3,8 +3,8 @@
 
 %define module	numpy
 %define name	python-%{module}
-%define version 1.4.1
-%define release %mkrel 2
+%define version 1.5.0
+%define release %mkrel 1
 %define epoch 	1
 
 Summary:	A fast multidimensional array facility for Python
@@ -63,6 +63,8 @@ CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= %{__python} setup.py ins
 %__mv -f %{buildroot}%{py_platsitedir}/%{module}/f2py/f2py.1 f2py.1
 %__install -D -p -m 0644 f2py.1 %{buildroot}%{_mandir}/man1/f2py.1
 
+%__rm -rf %{buildroot}%{py_platsitedir}/%{module}/tools/
+
 # Remove doc files that should be in %doc:
 %__rm -f %{buildroot}%{py_platsitedir}/%{module}/COMPATIBILITY
 %__rm -f %{buildroot}%{py_platsitedir}/%{module}/*.txt
@@ -92,7 +94,7 @@ popd &> /dev/null
 %{py_platsitedir}/%{module}/ma/
 %{py_platsitedir}/%{module}/matrixlib/
 %{py_platsitedir}/%{module}/numarray/
-%exclude %{py_platsitedir}/%{module}/numarray/numpy/
+%exclude %{py_platsitedir}/%{module}/numarray/include/
 %{py_platsitedir}/%{module}/oldnumeric/
 %{py_platsitedir}/%{module}/polynomial/
 %{py_platsitedir}/%{module}/random/
@@ -106,7 +108,7 @@ popd &> /dev/null
 %{_bindir}/f2py
 %{_mandir}/man1/f2py.*
 %{py_platsitedir}/%{module}/core/include/
-%{py_platsitedir}/%{module}/numarray/numpy/
+%{py_platsitedir}/%{module}/numarray/include/
 %{py_platsitedir}/%{module}/distutils/
 %{py_platsitedir}/%{module}/f2py/
 %{py_platsitedir}/%{module}/random/randomkit.h
