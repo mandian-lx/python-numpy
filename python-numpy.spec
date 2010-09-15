@@ -58,7 +58,10 @@ in C and Fortran that can interact with Numpy
 %build
 CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= %{__python} setup.py config_fc --fcompiler=gnu95 build
 
-%make -C doc/ html
+pushd doc
+export PYTHONPATH=`dir -d ../build/lib.linux*`
+%make html
+popd
 
 %install
 %__rm -rf %{buildroot}
