@@ -4,7 +4,7 @@
 %define module	numpy
 %define name	python-%{module}
 %define version 1.5.0
-%define release %mkrel 1
+%define release %mkrel 2
 %define epoch 	1
 
 Summary:	A fast multidimensional array facility for Python
@@ -16,6 +16,7 @@ License:	BSD
 Group:		Development/Python
 Url: 		http://numpy.scipy.org
 Source0:	http://downloads.sourceforge.net/numpy/%{module}-%{version}.tar.gz
+Patch0:		doc-build-fix-1.5.0.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Provides:	f2py
 Obsoletes:	f2py
@@ -26,6 +27,7 @@ BuildRequires:	blas-devel
 %endif
 BuildRequires:	lapack-devel
 BuildRequires:	gcc-gfortran >= 4.0
+BuildRequires:	python-sphinx >= 1.0
 BuildRequires:	python-nose
 %py_requires -d
 
@@ -51,9 +53,12 @@ in C and Fortran that can interact with Numpy
 
 %prep
 %setup -q -n %{module}-%{version}
+%patch0 -p1
 
 %build
 CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= %{__python} setup.py config_fc --fcompiler=gnu95 build
+
+%make -C doc/ html
 
 %install
 %__rm -rf %{buildroot}
@@ -81,7 +86,7 @@ popd &> /dev/null
 
 %files 
 %defattr(-,root,root)
-%doc LICENSE.txt README.txt THANKS.txt DEV_README.txt COMPATIBILITY site.cfg.example
+%doc LICENSE.txt README.txt THANKS.txt DEV_README.txt COMPATIBILITY site.cfg.example doc/build/html
 %dir %{py_platsitedir}/%{module}
 %{py_platsitedir}/%{module}/*.py*
 %{py_platsitedir}/%{module}/core/ 
