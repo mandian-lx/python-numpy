@@ -28,6 +28,7 @@ BuildRequires:	blas-devel
 BuildRequires:	lapack-devel
 BuildRequires:	gcc-gfortran >= 4.0
 BuildRequires:	python-sphinx >= 1.0
+BuildRequires:	python-matplotlib
 BuildRequires:	python-nose
 %py_requires -d
 
