@@ -4,7 +4,7 @@
 %define module	numpy
 %define name	python-%{module}
 %define version 1.5.0
-%define release %mkrel 2
+%define release %mkrel 3
 %define epoch 	1
 
 Summary:	A fast multidimensional array facility for Python
