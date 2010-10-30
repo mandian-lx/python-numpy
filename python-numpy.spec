@@ -7,6 +7,10 @@
 %define release %mkrel 3
 %define epoch 	1
 
+# disable this for bootstrapping nose and sphinx
+%define enable_tests 0
+
+
 Summary:	A fast multidimensional array facility for Python
 Name:		python-%{module}
 Version:	%{version}
@@ -29,7 +33,9 @@ BuildRequires:	lapack-devel
 BuildRequires:	gcc-gfortran >= 4.0
 BuildRequires:	python-sphinx >= 1.0
 BuildRequires:	python-matplotlib
+%if %enable_tests
 BuildRequires:	python-nose
+%endif
 %py_requires -d
 
 %description
@@ -80,10 +86,12 @@ CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= %{__python} setup.py ins
 %__rm -f %{buildroot}%{py_platsitedir}/%{module}/site.cfg.example
 
 %check
+%if %enable_tests
 # Don't run tests from within main directory to avoid importing the uninstalled numpy stuff:
 pushd doc &> /dev/null
 PYTHONPATH="%{buildroot}%{py_platsitedir}" %{__python} -c "import numpy; numpy.test()"
 popd &> /dev/null
+%endif
 
 %clean
 %__rm -rf %{buildroot}
