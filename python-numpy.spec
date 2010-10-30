@@ -9,7 +9,7 @@
 
 # disable this for bootstrapping nose and sphinx
 %define enable_tests 0
-
+%define enable_doc 0
 
 Summary:	A fast multidimensional array facility for Python
 Name:		python-%{module}
@@ -31,8 +31,10 @@ BuildRequires:	blas-devel
 %endif
 BuildRequires:	lapack-devel
 BuildRequires:	gcc-gfortran >= 4.0
+%if %enable_doc
 BuildRequires:	python-sphinx >= 1.0
 BuildRequires:	python-matplotlib
+%endif
 %if %enable_tests
 BuildRequires:	python-nose
 %endif
@@ -65,10 +67,12 @@ in C and Fortran that can interact with Numpy
 %build
 CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= %{__python} setup.py config_fc --fcompiler=gnu95 build
 
+%if %enable_doc
 pushd doc
 export PYTHONPATH=`dir -d ../build/lib.linux*`
 %make html
 popd
+%endif
 
 %install
 %__rm -rf %{buildroot}
@@ -98,7 +102,10 @@ popd &> /dev/null
 
 %files 
 %defattr(-,root,root)
-%doc LICENSE.txt README.txt THANKS.txt DEV_README.txt COMPATIBILITY site.cfg.example doc/build/html
+%doc LICENSE.txt README.txt THANKS.txt DEV_README.txt COMPATIBILITY site.cfg.example 
+%if %enable_doc
+%doc doc/build/html
+%endif
 %dir %{py_platsitedir}/%{module}
 %{py_platsitedir}/%{module}/*.py*
 %{py_platsitedir}/%{module}/core/ 
