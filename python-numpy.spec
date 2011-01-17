@@ -20,6 +20,7 @@ License:	BSD
 Group:		Development/Python
 Url: 		http://numpy.scipy.org
 Source0:	http://downloads.sourceforge.net/numpy/%{module}-%{version}.tar.gz
+Patch0:		numpy-1.5.1-link.patch
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Provides:	f2py
 Obsoletes:	f2py
@@ -61,6 +62,7 @@ in C and Fortran that can interact with Numpy
 
 %prep
 %setup -q -n %{module}-%{version}
+%patch0 -p1
 
 %build
 CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= %{__python} setup.py config_fc --fcompiler=gnu95 build
