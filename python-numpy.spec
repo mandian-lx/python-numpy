@@ -4,7 +4,7 @@
 %define module	numpy
 %define name	python-%{module}
 %define version 1.5.1
-%define release %mkrel 1
+%define release %mkrel 2
 %define epoch 	1
 
 # disable this for bootstrapping nose and sphinx
