@@ -3,7 +3,7 @@
 
 %define module	numpy
 %define name	python-%{module}
-%define version 1.6.0
+%define version 1.6.1
 %define release %mkrel 1
 %define epoch 	1
 
