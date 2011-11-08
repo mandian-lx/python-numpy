@@ -2,9 +2,6 @@
 %{?_with_atlas: %global enable_atlas 1}
 
 %define module	numpy
-%define name	python-%{module}
-%define version 1.6.1
-%define release %mkrel 1
 %define epoch 	1
 
 # disable this for bootstrapping nose and sphinx
@@ -13,17 +10,16 @@
 
 Summary:	A fast multidimensional array facility for Python
 Name:		python-%{module}
-Version:	%{version}
+Version:	1.6.1
 Epoch:		%{epoch}
-Release:	%{release}
+Release:	2
 License:	BSD
 Group:		Development/Python
 Url: 		http://numpy.scipy.org
 Source0:	http://downloads.sourceforge.net/numpy/%{module}-%{version}.tar.gz
 Patch0:		numpy-1.5.1-link.patch
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
-Provides:	f2py
-Obsoletes:	f2py
+
+%rename	f2py
 %if %enable_atlas
 BuildRequires:	libatlas-devel
 %else
@@ -75,19 +71,19 @@ popd
 %endif
 
 %install
-%__rm -rf %{buildroot}
+rm -rf %{buildroot}
 CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= %{__python} setup.py install --root=%{buildroot} 
 
-%__rm -rf docs-f2py; %__mv %{buildroot}%{py_platsitedir}/%{module}/f2py/docs docs-f2py
-%__mv -f %{buildroot}%{py_platsitedir}/%{module}/f2py/f2py.1 f2py.1
-%__install -D -p -m 0644 f2py.1 %{buildroot}%{_mandir}/man1/f2py.1
+rm -rf docs-f2py; %__mv %{buildroot}%{py_platsitedir}/%{module}/f2py/docs docs-f2py
+mv -f %{buildroot}%{py_platsitedir}/%{module}/f2py/f2py.1 f2py.1
+install -D -p -m 0644 f2py.1 %{buildroot}%{_mandir}/man1/f2py.1
 
-%__rm -rf %{buildroot}%{py_platsitedir}/%{module}/tools/
+rm -rf %{buildroot}%{py_platsitedir}/%{module}/tools/
 
 # Remove doc files that should be in %doc:
-%__rm -f %{buildroot}%{py_platsitedir}/%{module}/COMPATIBILITY
-%__rm -f %{buildroot}%{py_platsitedir}/%{module}/*.txt
-%__rm -f %{buildroot}%{py_platsitedir}/%{module}/site.cfg.example
+rm -f %{buildroot}%{py_platsitedir}/%{module}/COMPATIBILITY
+rm -f %{buildroot}%{py_platsitedir}/%{module}/*.txt
+rm -f %{buildroot}%{py_platsitedir}/%{module}/site.cfg.example
 
 %check
 %if %enable_tests
@@ -97,11 +93,7 @@ PYTHONPATH="%{buildroot}%{py_platsitedir}" %{__python} -c "import numpy; numpy.t
 popd &> /dev/null
 %endif
 
-%clean
-%__rm -rf %{buildroot}
-
 %files 
-%defattr(-,root,root)
 %doc LICENSE.txt README.txt THANKS.txt DEV_README.txt COMPATIBILITY site.cfg.example 
 %if %enable_doc
 %doc doc/build/html
