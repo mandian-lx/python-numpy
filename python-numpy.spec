@@ -3,6 +3,12 @@
 
 %define module	numpy
 %define epoch 	1
+%define	rel	2
+%if %mdkversion < 201100
+%define	release	%mkrel %rel
+%else
+%define release	%rel
+%endif
 
 # disable this for bootstrapping nose and sphinx
 %define enable_tests 0
@@ -12,7 +18,7 @@ Summary:	A fast multidimensional array facility for Python
 Name:		python-%{module}
 Version:	1.6.2
 Epoch:		%{epoch}
-Release:	1
+Release:	%{release}
 License:	BSD
 Group:		Development/Python
 Url: 		http://numpy.scipy.org
