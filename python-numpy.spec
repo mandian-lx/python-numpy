@@ -9,9 +9,9 @@
 
 Summary:	A fast multidimensional array facility for Python
 Name:		python-%{module}
-Version:	1.6.2
+Version:	1.7.0
 Epoch:		1
-Release:	4
+Release:	1
 License:	BSD
 Group:		Development/Python
 Url: 		http://numpy.scipy.org
@@ -131,6 +131,9 @@ popd &> /dev/null
 
 
 %changelog
+* Thu Feb 14 2013 pcpa <paulo.cesar.pereira.de.andrade@gmail.com> - 1:1.7.0-1
+- Update to latest upstream release.
+
 * Fri Jun 08 2012 Lev Givon <lev@mandriva.org> 1:1.6.2-2
 + Revision: 803420
 - Tweak to build on 2010.1.
