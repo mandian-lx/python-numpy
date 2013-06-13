@@ -9,7 +9,7 @@
 
 Summary:	A fast multidimensional array facility for Python
 Name:		python-%{module}
-Version:	1.7.0
+Version:	1.7.1
 Epoch:		1
 Release:	1
 License:	BSD

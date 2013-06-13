@@ -1,2 +1,4 @@
+removed_sources:
+  numpy-1.6.2.tar.gz: c36c471f44cf914abdf37137d158bf3ffa460141
 sources:
-  numpy-1.7.0.tar.gz: ba328985f20390b0f969a5be2a6e1141d5752cf9
+  numpy-1.7.1.tar.gz: 11d878214d11a25e05a24f6b27e2b838815a2588
