@@ -33,7 +33,7 @@ BuildRequires:	python-matplotlib
 BuildRequires:	python-nose
 %endif
 %rename	f2py
-%py_requires -d
+BuildRequires: python-devel
 
 %description
 Numpy is a general-purpose array-processing package designed to
