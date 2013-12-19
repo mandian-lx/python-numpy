@@ -141,8 +141,8 @@ rm -rf doc ; mv -f %{buildroot}%{python3_sitearch}/%{module}/doc .
 install -D -p -m 0644 f2py.1 %{buildroot}%{_mandir}/man1/f2py.1
 rm -rf %{buildroot}%{python3_sitearch}/%{module}/__pycache__
 
-pushd %{buildroot}%{_bindir}
-popd
+# Drop shebang from non-executable scripts to make rpmlint happy
+find %{buildroot}%{py3_platsitedir} -name "*py" -perm 644 -exec sed -i '/#!\/usr\/bin\/env python/d' {} \;
 
 popd
 
