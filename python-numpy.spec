@@ -11,19 +11,20 @@ Summary:	A fast multidimensional array facility for Python
 Name:		python-%{module}
 Epoch:		1
 Version:	1.7.1
-Release:	5
+Release:	6
 License:	BSD
 Group:		Development/Python
-Url:		http://numpy.scipy.org
-Source0:	http://downloads.sourceforge.net/numpy/%{module}-%{version}.tar.gz
+Url: 		http://numpy.scipy.org
+Source0:	https://sourceforge.net/projects/numpy/files/NumPy/1.7.1/numpy-%{version}.tar.gz
 Patch0:		numpy-1.5.1-link.patch
 
+%rename	f2py
 %if %enable_atlas
 BuildRequires:	libatlas-devel
 %else
-BuildRequires:	pkgconfig(blas)
+BuildRequires:	blas-devel
 %endif
-BuildRequires:	pkgconfig(lapack)
+BuildRequires:	lapack-devel
 BuildRequires:	gcc-gfortran >= 4.0
 %if %enable_doc
 BuildRequires:	python-sphinx >= 1.0
@@ -32,8 +33,11 @@ BuildRequires:	python-matplotlib
 %if %enable_tests
 BuildRequires:	python-nose
 %endif
-%rename	f2py
 BuildRequires: python-devel
+BuildRequires: python-cython
+BuildRequires: python-setuptools
+BuildRequires: pkgconfig(python3)
+BuildRequires: python3-distribute
 
 %description
 Numpy is a general-purpose array-processing package designed to
@@ -55,12 +59,60 @@ Requires:	%{name} = %{EVRD}
 This package contains tools and header files need to develop modules 
 in C and Fortran that can interact with Numpy
 
+%package -n python3-numpy
+Summary:        A fast multidimensional array facility for Python3
+Group:          Development/Python
+License:        BSD
+
+%description -n python3-numpy
+Numpy is a general-purpose array-processing package designed to
+efficiently manipulate large multi-dimensional arrays of arbitrary
+records without sacrificing too much speed for small multi-dimensional
+arrays. Numpy is built on the Numeric code base and adds features
+introduced by numarray as well as an extended C-API and the ability to
+create arrays of arbitrary type.
+
+Numpy also provides facilities for basic linear algebra routines,
+basic Fourier transforms, and random number generation.
+
+%package -n python3-numpy-devel
+Summary:        Numpy headers and development tools
+Group:          Development/Python
+Requires:       python3-numpy = %{epoch}:%{version}-%{release}
+
+%description -n python3-numpy-devel
+This package contains tools and header files need to develop modules.
+in C and Fortran that can interact with Numpy.
+
 %prep
-%setup -qn %{module}-%{version}
-%apply_patches
+%setup -qc
+mv %{module}-%{version} python2
+cp -a python2 python3
+pushd python2
+%patch0 -p1
+# workaround for rhbz#849713
+# http://mail.scipy.org/pipermail/numpy-discussion/2012-July/063530.html
+rm numpy/distutils/command/__init__.py && touch numpy/distutils/command/__init__.py
+popd
+
+pushd python3
+%patch0 -p1
+rm numpy/distutils/command/__init__.py && touch numpy/distutils/command/__init__.py
+popd
 
 %build
-CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= %{__python} setup.py config_fc --fcompiler=gnu95 build
+pushd python3
+CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= python3 setup.py config_fc --fcompiler=gnu95 build
+#env ATLAS=%{_libdir} FFTW=%{_libdir} BLAS=%{_libdir} \
+#    LAPACK=%{_libdir} CFLAGS="%{optflags} -fPIC -O3" \
+#    %{__python3} setup.py build
+popd
+
+pushd python2
+CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= python setup.py config_fc --fcompiler=gnu95 build
+#env ATLAS=%{_libdir} FFTW=%{_libdir} BLAS=%{_libdir} \
+#    LAPACK=%{_libdir} CFLAGS="%{optflags} -fPIC -O3" \
+#    python setup.py build
 
 %if %enable_doc
 pushd doc
@@ -69,10 +121,39 @@ export PYTHONPATH=`dir -d ../build/lib.linux*`
 popd
 %endif
 
-%install
-CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= %{__python} setup.py install --root=%{buildroot} 
+popd
 
-rm -rf docs-f2py; %__mv %{buildroot}%{py_platsitedir}/%{module}/f2py/docs docs-f2py
+
+%install
+# first install python3 so the binaries are overwritten by the python2 ones
+pushd python3
+#%{__python} setup.py install -O1 --skip-build --root %{buildroot}
+# skip-build currently broken, this works around it for now
+#env ATLAS=%{_libdir} FFTW=%{_libdir} BLAS=%{_libdir} \
+#    LAPACK=%{_libdir} CFLAGS="%{optflags} -fPIC -O3" \
+#    python3 setup.py install --root %{buildroot}
+CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= python3 setup.py install --root=%{buildroot}
+
+rm -rf docs-f2py ; mv %{buildroot}%{python3_sitearch}/%{module}/f2py/docs docs-f2py
+mv -f %{buildroot}%{python3_sitearch}/%{module}/f2py/f2py.1 f2py.1
+rm -rf doc ; mv -f %{buildroot}%{python3_sitearch}/%{module}/doc .
+
+install -D -p -m 0644 f2py.1 %{buildroot}%{_mandir}/man1/f2py.1
+rm -rf %{buildroot}%{python3_sitearch}/%{module}/__pycache__
+
+pushd %{buildroot}%{_bindir}
+popd
+
+popd
+
+pushd python2
+# skip-build currently broken, this works around it for now
+#env ATLAS=%{_libdir} FFTW=%{_libdir} BLAS=%{_libdir} \
+#    LAPACK=%{_libdir} CFLAGS="%{optflags} -fPIC -O3" \
+#    python setup.py install --root %{buildroot}
+CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= python setup.py install --root=%{buildroot}
+
+rm -rf docs-f2py; mv %{buildroot}%{py_platsitedir}/%{module}/f2py/docs docs-f2py
 mv -f %{buildroot}%{py_platsitedir}/%{module}/f2py/f2py.1 f2py.1
 install -D -p -m 0644 f2py.1 %{buildroot}%{_mandir}/man1/f2py.1
 
@@ -85,19 +166,24 @@ rm -f %{buildroot}%{py_platsitedir}/%{module}/site.cfg.example
 
 # Drop shebang from non-executable scripts to make rpmlint happy
 find %{buildroot}%{py_platsitedir} -name "*py" -perm 644 -exec sed -i '/#!\/usr\/bin\/env python/d' {} \;
+popd
 
 %check
 %if %enable_tests
 # Don't run tests from within main directory to avoid importing the uninstalled numpy stuff:
 pushd doc &> /dev/null
-PYTHONPATH="%{buildroot}%{py_platsitedir}" %{__python} -c "import numpy; numpy.test()"
+PYTHONPATH="%{buildroot}%{py_platsitedir}" %{__python} -c "import pkg_resources, numpy; numpy.test()"
+popd &> /dev/null
+
+pushd doc &> /dev/null
+PYTHONPATH="%{buildroot}%{python3_sitearch}" %{__python3} -c "import pkg_resources, numpy ; numpy.test()"
 popd &> /dev/null
 %endif
 
 %files 
-%doc LICENSE.txt README.txt THANKS.txt DEV_README.txt COMPATIBILITY site.cfg.example 
+%doc python2/LICENSE.txt python2/README.txt python2/THANKS.txt python2/DEV_README.txt python2/COMPATIBILITY python2/site.cfg.example 
 %if %enable_doc
-%doc doc/build/html
+%doc python2/doc/build/html
 %endif
 %dir %{py_platsitedir}/%{module}
 %{py_platsitedir}/%{module}/*.py*
@@ -129,3 +215,26 @@ popd &> /dev/null
 %{py_platsitedir}/%{module}/f2py/
 %{py_platsitedir}/%{module}/random/randomkit.h
 
+%files -n python3-numpy
+%doc python3/LICENSE.txt python3/README.txt python3/THANKS.txt python3/DEV_README.txt python3/COMPATIBILITY python3/site.cfg.example
+%dir %{python3_sitearch}/%{module}
+%{python3_sitearch}/%{module}/*.py*
+%{python3_sitearch}/%{module}/core
+%{python3_sitearch}/%{module}/distutils
+%{python3_sitearch}/%{module}/fft
+%{python3_sitearch}/%{module}/lib
+%{python3_sitearch}/%{module}/linalg
+%{python3_sitearch}/%{module}/ma
+%{python3_sitearch}/%{module}/numarray
+%{python3_sitearch}/%{module}/oldnumeric
+%{python3_sitearch}/%{module}/random
+%{python3_sitearch}/%{module}/testing
+%{python3_sitearch}/%{module}/tests
+%{python3_sitearch}/%{module}/compat
+%{python3_sitearch}/%{module}/matrixlib
+%{python3_sitearch}/%{module}/polynomial
+%{python3_sitearch}/%{module}-*.egg-info
+
+%files -n python3-numpy-devel
+%{_bindir}/f2py3
+%{python3_sitearch}/%{module}/f2py
