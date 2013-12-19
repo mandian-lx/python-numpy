@@ -217,24 +217,30 @@ popd &> /dev/null
 
 %files -n python3-numpy
 %doc python3/LICENSE.txt python3/README.txt python3/THANKS.txt python3/DEV_README.txt python3/COMPATIBILITY python3/site.cfg.example
-%dir %{python3_sitearch}/%{module}
-%{python3_sitearch}/%{module}/*.py*
-%{python3_sitearch}/%{module}/core
-%{python3_sitearch}/%{module}/distutils
-%{python3_sitearch}/%{module}/fft
-%{python3_sitearch}/%{module}/lib
-%{python3_sitearch}/%{module}/linalg
-%{python3_sitearch}/%{module}/ma
-%{python3_sitearch}/%{module}/numarray
-%{python3_sitearch}/%{module}/oldnumeric
-%{python3_sitearch}/%{module}/random
-%{python3_sitearch}/%{module}/testing
-%{python3_sitearch}/%{module}/tests
-%{python3_sitearch}/%{module}/compat
-%{python3_sitearch}/%{module}/matrixlib
-%{python3_sitearch}/%{module}/polynomial
-%{python3_sitearch}/%{module}-*.egg-info
+%dir %{py3_platsitedir}/%{module}
+%{py3_platsitedir}/%{module}/*.py*
+%{py3_platsitedir}/%{module}/core
+%exclude %{py3_platsitedir}/%{module}/core/include/
+%{py3_platsitedir}/%{module}/fft
+%{py3_platsitedir}/%{module}/lib
+%{py3_platsitedir}/%{module}/linalg
+%{py3_platsitedir}/%{module}/ma
+%{py3_platsitedir}/%{module}/numarray
+%exclude %{py3_platsitedir}/%{module}/numarray/include/
+%{py3_platsitedir}/%{module}/oldnumeric
+%{py3_platsitedir}/%{module}/random
+%exclude %{py3_platsitedir}/%{module}/random/randomkit.h
+%{py3_platsitedir}/%{module}/testing
+%{py3_platsitedir}/%{module}/tests
+%{py3_platsitedir}/%{module}/compat
+%{py3_platsitedir}/%{module}/matrixlib
+%{py3_platsitedir}/%{module}/polynomial
+%{py3_platsitedir}/%{module}-*.egg-info
 
 %files -n python3-numpy-devel
 %{_bindir}/f2py3
-%{python3_sitearch}/%{module}/f2py
+%{py3_platsitedir}/%{module}/f2py
+%{py3_platsitedir}/%{module}/core/include/
+%{py3_platsitedir}/%{module}/numarray/include/
+%{py3_platsitedir}/%{module}/distutils/
+%{py3_platsitedir}/%{module}/random/randomkit.h
