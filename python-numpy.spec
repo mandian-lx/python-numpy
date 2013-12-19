@@ -222,6 +222,7 @@ popd &> /dev/null
 %{py3_platsitedir}/%{module}/core
 %exclude %{py3_platsitedir}/%{module}/core/include/
 %{py3_platsitedir}/%{module}/fft
+%exclude %{py3_platsitedir}/%{module}/lib/*.a
 %{py3_platsitedir}/%{module}/lib
 %{py3_platsitedir}/%{module}/linalg
 %{py3_platsitedir}/%{module}/ma
@@ -244,3 +245,4 @@ popd &> /dev/null
 %{py3_platsitedir}/%{module}/numarray/include/
 %{py3_platsitedir}/%{module}/distutils/
 %{py3_platsitedir}/%{module}/random/randomkit.h
+%{py3_platsitedir}/%{module}/lib/*.a
