@@ -191,6 +191,7 @@ popd &> /dev/null
 %{py_platsitedir}/%{module}/compat/
 %{py_platsitedir}/%{module}/doc/
 %exclude %{py_platsitedir}/%{module}/core/include/
+%exclude %{py_platsitedir}/%{module}/core/lib/*.a
 %{py_platsitedir}/%{module}/fft/
 %{py_platsitedir}/%{module}/lib/
 %{py_platsitedir}/%{module}/linalg/
@@ -210,6 +211,7 @@ popd &> /dev/null
 %{_bindir}/f2py
 %{_mandir}/man1/f2py.*
 %{py_platsitedir}/%{module}/core/include/
+%{py_platsitedir}/%{module}/core/lib/*.a
 %{py_platsitedir}/%{module}/numarray/include/
 %{py_platsitedir}/%{module}/distutils/
 %{py_platsitedir}/%{module}/f2py/
@@ -221,8 +223,8 @@ popd &> /dev/null
 %{py3_platsitedir}/%{module}/*.py*
 %{py3_platsitedir}/%{module}/core
 %exclude %{py3_platsitedir}/%{module}/core/include/
+%exclude %{py3_platsitedir}/%{module}/core/lib/*.a
 %{py3_platsitedir}/%{module}/fft
-%exclude %{py3_platsitedir}/%{module}/lib/*.a
 %{py3_platsitedir}/%{module}/lib
 %{py3_platsitedir}/%{module}/linalg
 %{py3_platsitedir}/%{module}/ma
@@ -242,6 +244,7 @@ popd &> /dev/null
 %{_bindir}/f2py3
 %{py3_platsitedir}/%{module}/f2py
 %{py3_platsitedir}/%{module}/core/include/
+%{py3_platsitedir}/%{module}/core/lib/*.a
 %{py3_platsitedir}/%{module}/numarray/include/
 %{py3_platsitedir}/%{module}/distutils/
 %{py3_platsitedir}/%{module}/random/randomkit.h
