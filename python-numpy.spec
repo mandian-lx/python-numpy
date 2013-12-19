@@ -248,4 +248,3 @@ popd &> /dev/null
 %{py3_platsitedir}/%{module}/numarray/include/
 %{py3_platsitedir}/%{module}/distutils/
 %{py3_platsitedir}/%{module}/random/randomkit.h
-%{py3_platsitedir}/%{module}/lib/*.a
