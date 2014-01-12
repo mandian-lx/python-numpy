@@ -10,12 +10,12 @@
 Summary:	A fast multidimensional array facility for Python
 Name:		python-%{module}
 Epoch:		1
-Version:	1.7.1
-Release:	6
+Version:	1.8.0
+Release:	1
 License:	BSD
 Group:		Development/Python
 Url: 		http://numpy.scipy.org
-Source0:	https://sourceforge.net/projects/numpy/files/NumPy/1.7.1/numpy-%{version}.tar.gz
+Source0:	http://downloads.sourceforge.net/numpy/numpy-%{version}.tar.gz
 Patch0:		numpy-1.5.1-link.patch
 
 %rename	f2py
@@ -134,12 +134,12 @@ pushd python3
 #    python3 setup.py install --root %{buildroot}
 CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= python3 setup.py install --root=%{buildroot}
 
-rm -rf docs-f2py ; mv %{buildroot}%{python3_sitearch}/%{module}/f2py/docs docs-f2py
-mv -f %{buildroot}%{python3_sitearch}/%{module}/f2py/f2py.1 f2py.1
-rm -rf doc ; mv -f %{buildroot}%{python3_sitearch}/%{module}/doc .
+rm -rf docs-f2py ; mv %{buildroot}%{py3_platsitedir}/%{module}/f2py/docs docs-f2py
+mv -f %{buildroot}%{py3_platsitedir}/%{module}/f2py/f2py.1 f2py.1
+rm -rf doc ; mv -f %{buildroot}%{py3_platsitedir}/%{module}/doc .
 
 install -D -p -m 0644 f2py.1 %{buildroot}%{_mandir}/man1/f2py.1
-rm -rf %{buildroot}%{python3_sitearch}/%{module}/__pycache__
+rm -rf %{buildroot}%{py3_platsitedir}/%{module}/__pycache__
 
 # Drop shebang from non-executable scripts to make rpmlint happy
 find %{buildroot}%{py3_platsitedir} -name "*py" -perm 644 -exec sed -i '/#!\/usr\/bin\/env python/d' {} \;
@@ -172,11 +172,11 @@ popd
 %if %enable_tests
 # Don't run tests from within main directory to avoid importing the uninstalled numpy stuff:
 pushd doc &> /dev/null
-PYTHONPATH="%{buildroot}%{py_platsitedir}" %{__python} -c "import pkg_resources, numpy; numpy.test()"
+PYTHONPATH="%{buildroot}%{py_platsitedir}" python -c "import pkg_resources, numpy; numpy.test()"
 popd &> /dev/null
 
 pushd doc &> /dev/null
-PYTHONPATH="%{buildroot}%{python3_sitearch}" %{__python3} -c "import pkg_resources, numpy ; numpy.test()"
+PYTHONPATH="%{buildroot}%{py3_platsitedir}" %{__python3} -c "import pkg_resources, numpy ; numpy.test()"
 popd &> /dev/null
 %endif
 
@@ -248,3 +248,4 @@ popd &> /dev/null
 %{py3_platsitedir}/%{module}/numarray/include/
 %{py3_platsitedir}/%{module}/distutils/
 %{py3_platsitedir}/%{module}/random/randomkit.h
+

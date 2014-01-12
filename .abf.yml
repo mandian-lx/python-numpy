@@ -1,2 +1,4 @@
-sources:
+removed_sources:
   numpy-1.7.1.tar.gz: 11d878214d11a25e05a24f6b27e2b838815a2588
+sources:
+  numpy-1.8.0.tar.gz: a2c02c5fb2ab8cf630982cddc6821e74f5769974
