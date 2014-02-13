@@ -33,7 +33,7 @@ BuildRequires:	python-matplotlib
 %if %enable_tests
 BuildRequires:	python-nose
 %endif
-%py_requires -d
+BuildRequires: python-devel
 
 %description
 Numpy is a general-purpose array-processing package designed to
