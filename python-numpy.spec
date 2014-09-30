@@ -10,8 +10,8 @@
 Summary:	A fast multidimensional array facility for Python
 Name:		python-%{module}
 Epoch:		1
-Version:	1.8.0
-Release:	3
+Version:	1.9.0
+Release:	1
 License:	BSD
 Group:		Development/Python
 Url: 		http://numpy.scipy.org
@@ -37,7 +37,7 @@ BuildRequires: python-devel
 BuildRequires: python-cython
 BuildRequires: python-setuptools
 BuildRequires: pkgconfig(python3)
-BuildRequires: python3-distribute
+BuildRequires: python2-distribute
 
 %description
 Numpy is a general-purpose array-processing package designed to
@@ -59,12 +59,12 @@ Requires:	%{name} = %{EVRD}
 This package contains tools and header files need to develop modules 
 in C and Fortran that can interact with Numpy
 
-%package -n python3-numpy
-Summary:        A fast multidimensional array facility for Python3
+%package -n python2-numpy
+Summary:        A fast multidimensional array facility for Python2
 Group:          Development/Python
 License:        BSD
 
-%description -n python3-numpy
+%description -n python2-numpy
 Numpy is a general-purpose array-processing package designed to
 efficiently manipulate large multi-dimensional arrays of arbitrary
 records without sacrificing too much speed for small multi-dimensional
@@ -75,12 +75,12 @@ create arrays of arbitrary type.
 Numpy also provides facilities for basic linear algebra routines,
 basic Fourier transforms, and random number generation.
 
-%package -n python3-numpy-devel
+%package -n python2-numpy-devel
 Summary:        Numpy headers and development tools
 Group:          Development/Python
-Requires:       python3-numpy = %{epoch}:%{version}-%{release}
+Requires:       python2-numpy = %{epoch}:%{version}-%{release}
 
-%description -n python3-numpy-devel
+%description -n python2-numpy-devel
 This package contains tools and header files need to develop modules.
 in C and Fortran that can interact with Numpy.
 
@@ -125,54 +125,46 @@ popd
 
 
 %install
-# first install python3 so the binaries are overwritten by the python2 ones
-pushd python3
+# first install python2 so the binaries are overwritten by the python2 ones
+pushd python2
 #%{__python} setup.py install -O1 --skip-build --root %{buildroot}
 # skip-build currently broken, this works around it for now
 #env ATLAS=%{_libdir} FFTW=%{_libdir} BLAS=%{_libdir} \
 #    LAPACK=%{_libdir} CFLAGS="%{optflags} -fPIC -O3" \
 #    python3 setup.py install --root %{buildroot}
-CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= python3 setup.py install --root=%{buildroot}
+CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= python2 setup.py install --root=%{buildroot}
 
-rm -rf docs-f2py ; mv %{buildroot}%{py3_platsitedir}/%{module}/f2py/docs docs-f2py
-mv -f %{buildroot}%{py3_platsitedir}/%{module}/f2py/f2py.1 f2py.1
-rm -rf doc ; mv -f %{buildroot}%{py3_platsitedir}/%{module}/doc .
-
-install -D -p -m 0644 f2py.1 %{buildroot}%{_mandir}/man1/f2py.1
-rm -rf %{buildroot}%{py3_platsitedir}/%{module}/__pycache__
+rm -rf %{buildroot}%{py2_platsitedir}/%{module}/__pycache__
 
 # Drop shebang from non-executable scripts to make rpmlint happy
-find %{buildroot}%{py3_platsitedir} -name "*py" -perm 644 -exec sed -i '/#!\/usr\/bin\/env python/d' {} \;
+find %{buildroot}%{py2_platsitedir} -name "*py" -perm 644 -exec sed -i '/#!\/usr\/bin\/env python/d' {} \;
 
 popd
 
-pushd python2
+pushd python3
 # skip-build currently broken, this works around it for now
 #env ATLAS=%{_libdir} FFTW=%{_libdir} BLAS=%{_libdir} \
 #    LAPACK=%{_libdir} CFLAGS="%{optflags} -fPIC -O3" \
 #    python setup.py install --root %{buildroot}
 CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= python setup.py install --root=%{buildroot}
 
-rm -rf docs-f2py; mv %{buildroot}%{py_platsitedir}/%{module}/f2py/docs docs-f2py
-mv -f %{buildroot}%{py_platsitedir}/%{module}/f2py/f2py.1 f2py.1
-install -D -p -m 0644 f2py.1 %{buildroot}%{_mandir}/man1/f2py.1
-
-rm -rf %{buildroot}%{py_platsitedir}/%{module}/tools/
+rm -rf %{buildroot}%{py3_platsitedir}/%{module}/tools/
+rm -rf %{buildroot}%{py3_platsitedir}/%{module}/__pycache__
 
 # Remove doc files that should be in %doc:
-rm -f %{buildroot}%{py_platsitedir}/%{module}/COMPATIBILITY
-rm -f %{buildroot}%{py_platsitedir}/%{module}/*.txt
-rm -f %{buildroot}%{py_platsitedir}/%{module}/site.cfg.example
+rm -f %{buildroot}%{py3_platsitedir}/%{module}/COMPATIBILITY
+rm -f %{buildroot}%{py3_platsitedir}/%{module}/*.txt
+rm -f %{buildroot}%{py3_platsitedir}/%{module}/site.cfg.example
 
 # Drop shebang from non-executable scripts to make rpmlint happy
-find %{buildroot}%{py_platsitedir} -name "*py" -perm 644 -exec sed -i '/#!\/usr\/bin\/env python/d' {} \;
+find %{buildroot}%{py3_platsitedir} -name "*py" -perm 644 -exec sed -i '/#!\/usr\/bin\/env python/d' {} \;
 popd
 
 %check
 %if %enable_tests
 # Don't run tests from within main directory to avoid importing the uninstalled numpy stuff:
 pushd doc &> /dev/null
-PYTHONPATH="%{buildroot}%{py_platsitedir}" python -c "import pkg_resources, numpy; numpy.test()"
+PYTHONPATH="%{buildroot}%{py2_platsitedir}" python2 -c "import pkg_resources, numpy; numpy.test()"
 popd &> /dev/null
 
 pushd doc &> /dev/null
@@ -181,9 +173,9 @@ popd &> /dev/null
 %endif
 
 %files 
-%doc python2/LICENSE.txt python2/README.txt python2/THANKS.txt python2/DEV_README.txt python2/COMPATIBILITY python2/site.cfg.example 
+%doc python3/LICENSE.txt python3/README.txt python3/THANKS.txt python3/DEV_README.txt python3/COMPATIBILITY python3/site.cfg.example 
 %if %enable_doc
-%doc python2/doc/build/html
+%doc python3/doc/build/html
 %endif
 %dir %{py_platsitedir}/%{module}
 %{py_platsitedir}/%{module}/*.py*
@@ -197,9 +189,6 @@ popd &> /dev/null
 %{py_platsitedir}/%{module}/linalg/
 %{py_platsitedir}/%{module}/ma/
 %{py_platsitedir}/%{module}/matrixlib/
-%{py_platsitedir}/%{module}/numarray/
-%exclude %{py_platsitedir}/%{module}/numarray/include/
-%{py_platsitedir}/%{module}/oldnumeric/
 %{py_platsitedir}/%{module}/polynomial/
 %{py_platsitedir}/%{module}/random/
 %exclude %{py_platsitedir}/%{module}/random/randomkit.h
@@ -209,43 +198,39 @@ popd &> /dev/null
 
 %files devel
 %{_bindir}/f2py
-%{_mandir}/man1/f2py.*
+%{_bindir}/f2py3
 %{py_platsitedir}/%{module}/core/include/
 %{py_platsitedir}/%{module}/core/lib/*.a
-%{py_platsitedir}/%{module}/numarray/include/
 %{py_platsitedir}/%{module}/distutils/
 %{py_platsitedir}/%{module}/f2py/
 %{py_platsitedir}/%{module}/random/randomkit.h
 
-%files -n python3-numpy
-%doc python3/LICENSE.txt python3/README.txt python3/THANKS.txt python3/DEV_README.txt python3/COMPATIBILITY python3/site.cfg.example
-%dir %{py3_platsitedir}/%{module}
-%{py3_platsitedir}/%{module}/*.py*
-%{py3_platsitedir}/%{module}/core
-%exclude %{py3_platsitedir}/%{module}/core/include/
-%exclude %{py3_platsitedir}/%{module}/core/lib/*.a
-%{py3_platsitedir}/%{module}/fft
-%{py3_platsitedir}/%{module}/lib
-%{py3_platsitedir}/%{module}/linalg
-%{py3_platsitedir}/%{module}/ma
-%{py3_platsitedir}/%{module}/numarray
-%exclude %{py3_platsitedir}/%{module}/numarray/include/
-%{py3_platsitedir}/%{module}/oldnumeric
-%{py3_platsitedir}/%{module}/random
-%exclude %{py3_platsitedir}/%{module}/random/randomkit.h
-%{py3_platsitedir}/%{module}/testing
-%{py3_platsitedir}/%{module}/tests
-%{py3_platsitedir}/%{module}/compat
-%{py3_platsitedir}/%{module}/matrixlib
-%{py3_platsitedir}/%{module}/polynomial
-%{py3_platsitedir}/%{module}-*.egg-info
+%files -n python2-numpy
+%doc python2/LICENSE.txt python2/README.txt python2/THANKS.txt python2/DEV_README.txt python2/COMPATIBILITY python2/site.cfg.example
+%dir %{py2_platsitedir}/%{module}
+%{py2_platsitedir}/%{module}/*.py*
+%{py2_platsitedir}/%{module}/doc
+%{py2_platsitedir}/%{module}/core
+%exclude %{py2_platsitedir}/%{module}/core/include/
+%exclude %{py2_platsitedir}/%{module}/core/lib/*.a
+%{py2_platsitedir}/%{module}/fft
+%{py2_platsitedir}/%{module}/lib
+%{py2_platsitedir}/%{module}/linalg
+%{py2_platsitedir}/%{module}/ma
+%{py2_platsitedir}/%{module}/random
+%exclude %{py2_platsitedir}/%{module}/random/randomkit.h
+%{py2_platsitedir}/%{module}/testing
+%{py2_platsitedir}/%{module}/tests
+%{py2_platsitedir}/%{module}/compat
+%{py2_platsitedir}/%{module}/matrixlib
+%{py2_platsitedir}/%{module}/polynomial
+%{py2_platsitedir}/%{module}-*.egg-info
 
-%files -n python3-numpy-devel
-%{_bindir}/f2py3
-%{py3_platsitedir}/%{module}/f2py
-%{py3_platsitedir}/%{module}/core/include/
-%{py3_platsitedir}/%{module}/core/lib/*.a
-%{py3_platsitedir}/%{module}/numarray/include/
-%{py3_platsitedir}/%{module}/distutils/
-%{py3_platsitedir}/%{module}/random/randomkit.h
+%files -n python2-numpy-devel
+%{_bindir}/f2py2
+%{py2_platsitedir}/%{module}/f2py
+%{py2_platsitedir}/%{module}/core/include/
+%{py2_platsitedir}/%{module}/core/lib/*.a
+%{py2_platsitedir}/%{module}/distutils/
+%{py2_platsitedir}/%{module}/random/randomkit.h
 
