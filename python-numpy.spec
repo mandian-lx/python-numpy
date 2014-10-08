@@ -101,6 +101,10 @@ rm numpy/distutils/command/__init__.py && touch numpy/distutils/command/__init__
 popd
 
 %build
+%ifarch aarch64
+export CC=gcc
+export CXX=g++
+%endif
 pushd python3
 CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= python3 setup.py config_fc --fcompiler=gnu95 build
 #env ATLAS=%{_libdir} FFTW=%{_libdir} BLAS=%{_libdir} \
