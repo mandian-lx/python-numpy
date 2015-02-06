@@ -10,8 +10,8 @@
 Summary:	A fast multidimensional array facility for Python
 Name:		python-%{module}
 Epoch:		1
-Version:	1.9.0
-Release:	2
+Version:	1.9.1
+Release:	1
 License:	BSD
 Group:		Development/Python
 Url: 		http://numpy.scipy.org
@@ -33,10 +33,10 @@ BuildRequires:	python-matplotlib
 %if %enable_tests
 BuildRequires:	python-nose
 %endif
-BuildRequires: python-devel
 BuildRequires: python-cython
 BuildRequires: python-setuptools
 BuildRequires: pkgconfig(python3)
+BuildRequires: pkgconfig(python2)
 BuildRequires: python2-distribute
 
 %description
