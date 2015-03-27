@@ -10,12 +10,12 @@
 Summary:	A fast multidimensional array facility for Python
 Name:		python-%{module}
 Epoch:		1
-Version:	1.9.1
+Version:	1.9.2
 Release:	1
 License:	BSD
 Group:		Development/Python
 Url: 		http://numpy.scipy.org
-Source0:	http://downloads.sourceforge.net/numpy/numpy-%{version}.tar.gz
+Source0:	http://sourceforge.net/projects/numpy/files/NumPy/1.9.2/numpy-%{version}.tar.gz
 Patch0:		numpy-1.5.1-link.patch
 
 %rename	f2py
@@ -172,7 +172,7 @@ PYTHONPATH="%{buildroot}%{py2_platsitedir}" python2 -c "import pkg_resources, nu
 popd &> /dev/null
 
 pushd doc &> /dev/null
-PYTHONPATH="%{buildroot}%{py3_platsitedir}" %{__python3} -c "import pkg_resources, numpy ; numpy.test()"
+PYTHONPATH="%{buildroot}%{py3_platsitedir}" python3 -c "import pkg_resources, numpy ; numpy.test()"
 popd &> /dev/null
 %endif
 
@@ -237,4 +237,3 @@ popd &> /dev/null
 %{py2_platsitedir}/%{module}/core/lib/*.a
 %{py2_platsitedir}/%{module}/distutils/
 %{py2_platsitedir}/%{module}/random/randomkit.h
-
