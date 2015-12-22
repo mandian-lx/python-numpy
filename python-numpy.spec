@@ -10,13 +10,13 @@
 Summary:	A fast multidimensional array facility for Python
 Name:		python-%{module}
 Epoch:		1
-Version:	1.9.1
-Release:	3
+Version:	1.10.2
+Release:	1
 License:	BSD
 Group:		Development/Python
 Url: 		http://numpy.scipy.org
 Source0:	http://downloads.sourceforge.net/numpy/numpy-%{version}.tar.gz
-Patch0:		numpy-1.5.1-link.patch
+Patch0:		numpy-1.10.2-link.patch
 
 %rename	f2py
 %if %enable_atlas
@@ -106,14 +106,14 @@ export CC=gcc
 export CXX=g++
 %endif
 pushd python3
-CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= python3 setup.py config_fc --fcompiler=gnu95 build
+CFLAGS="%{optflags} -fPIC -O3 -fno-lto" PYTHONDONTWRITEBYTECODE= python3 setup.py config_fc --fcompiler=gnu95 build
 #env ATLAS=%{_libdir} FFTW=%{_libdir} BLAS=%{_libdir} \
 #    LAPACK=%{_libdir} CFLAGS="%{optflags} -fPIC -O3" \
 #    %{__python3} setup.py build
 popd
 
 pushd python2
-CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= python setup.py config_fc --fcompiler=gnu95 build
+CFLAGS="%{optflags} -fPIC -O3 -fno-lto" PYTHONDONTWRITEBYTECODE= python setup.py config_fc --fcompiler=gnu95 build
 #env ATLAS=%{_libdir} FFTW=%{_libdir} BLAS=%{_libdir} \
 #    LAPACK=%{_libdir} CFLAGS="%{optflags} -fPIC -O3" \
 #    python setup.py build
@@ -136,7 +136,7 @@ pushd python2
 #env ATLAS=%{_libdir} FFTW=%{_libdir} BLAS=%{_libdir} \
 #    LAPACK=%{_libdir} CFLAGS="%{optflags} -fPIC -O3" \
 #    python3 setup.py install --root %{buildroot}
-CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= python2 setup.py install --root=%{buildroot}
+CFLAGS="%{optflags} -fPIC -O3 -fno-lto" PYTHONDONTWRITEBYTECODE= python2 setup.py install --root=%{buildroot}
 
 rm -rf %{buildroot}%{py2_platsitedir}/%{module}/__pycache__
 
@@ -150,7 +150,7 @@ pushd python3
 #env ATLAS=%{_libdir} FFTW=%{_libdir} BLAS=%{_libdir} \
 #    LAPACK=%{_libdir} CFLAGS="%{optflags} -fPIC -O3" \
 #    python setup.py install --root %{buildroot}
-CFLAGS="%{optflags} -fPIC -O3" PYTHONDONTWRITEBYTECODE= python setup.py install --root=%{buildroot}
+CFLAGS="%{optflags} -fPIC -O3 -fno-lto" PYTHONDONTWRITEBYTECODE= python setup.py install --root=%{buildroot}
 
 rm -rf %{buildroot}%{py3_platsitedir}/%{module}/tools/
 rm -rf %{buildroot}%{py3_platsitedir}/%{module}/__pycache__

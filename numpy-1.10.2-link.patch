@@ -1,0 +1,43 @@
+--- numpy-1.5.1/numpy/fft/setup.py.ori	2011-01-17 09:22:48.000000000 +0100
++++ numpy-1.5.1/numpy/fft/setup.py	2011-01-17 09:23:06.000000000 +0100
+@@ -8,7 +8,8 @@
+ 
+     # Configure fftpack_lite
+     config.add_extension('fftpack_lite',
+-                         sources=['fftpack_litemodule.c', 'fftpack.c']
++                         sources=['fftpack_litemodule.c', 'fftpack.c'],
++                         libraries=['m']
+                          )
+ 
+     return config
+--- numpy-1.5.1/numpy/random/setup.py.ori	2011-01-17 09:28:21.000000000 +0100
++++ numpy-1.5.1/numpy/random/setup.py	2011-01-17 09:28:43.000000000 +0100
+@@ -32,7 +32,7 @@
+     if needs_mingw_ftime_workaround():
+         defs.append(("NPY_NEEDS_MINGW_TIME_WORKAROUND", None))
+ 
+-    libs = []
++    libs = ['m']
+     # Configure mtrand
+     config.add_extension('mtrand',
+                          sources=[join('mtrand', x) for x in
+--- numpy-1.10.2/numpy/core/setup.py.orig    2015-12-22 15:34:53.323558508 +0000
++++ numpy-1.10.2/numpy/core/setup.py 2015-12-22 15:35:24.682610782 +0000
+@@ -933,7 +933,7 @@
+                                  generate_umath_c,
+                                  generate_ufunc_api],
+                          depends=deps + umath_deps,
+-                         libraries=['npymath'],
++                         libraries=['m','npymath'],
+                          )
+ 
+     #######################################################################
+@@ -941,7 +941,7 @@
+     #######################################################################
+ 
+     config.add_extension('umath_tests',
+-                    sources=[join('src', 'umath', 'umath_tests.c.src')])
++                    sources=[join('src', 'umath', 'umath_tests.c.src')],libraries=['m'])
+ 
+     #######################################################################
+     #                   custom rational dtype module                      #
