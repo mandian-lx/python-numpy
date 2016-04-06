@@ -100,23 +100,23 @@ pushd python3
 rm numpy/distutils/command/__init__.py && touch numpy/distutils/command/__init__.py
 popd
 
+cat >> site.cfg <<EOF
+[atlas]
+library_dirs = %{_libdir}/atlas
+atlas_libs = satlas
+EOF
+
 %build
 %ifarch aarch64
 export CC=gcc
 export CXX=g++
 %endif
 pushd python3
-CFLAGS="%{optflags} -fPIC -O3 -fno-lto" PYTHONDONTWRITEBYTECODE= python3 setup.py config_fc --fcompiler=gnu95 build
-#env ATLAS=%{_libdir} FFTW=%{_libdir} BLAS=%{_libdir} \
-#    LAPACK=%{_libdir} CFLAGS="%{optflags} -fPIC -O3" \
-#    %{__python3} setup.py build
+CFLAGS="%{optflags} -fPIC -O3 -fno-lto" PYTHONDONTWRITEBYTECODE= %{__python3} setup.py config_fc --fcompiler=gnu95 build
 popd
 
 pushd python2
-CFLAGS="%{optflags} -fPIC -O3 -fno-lto" PYTHONDONTWRITEBYTECODE= python setup.py config_fc --fcompiler=gnu95 build
-#env ATLAS=%{_libdir} FFTW=%{_libdir} BLAS=%{_libdir} \
-#    LAPACK=%{_libdir} CFLAGS="%{optflags} -fPIC -O3" \
-#    python setup.py build
+CFLAGS="%{optflags} -fPIC -O3 -fno-lto" PYTHONDONTWRITEBYTECODE= %{__python2} setup.py config_fc --fcompiler=gnu95 build
 
 %if %enable_doc
 pushd doc
@@ -131,12 +131,7 @@ popd
 %install
 # first install python2 so the binaries are overwritten by the python2 ones
 pushd python2
-#%{__python} setup.py install -O1 --skip-build --root %{buildroot}
-# skip-build currently broken, this works around it for now
-#env ATLAS=%{_libdir} FFTW=%{_libdir} BLAS=%{_libdir} \
-#    LAPACK=%{_libdir} CFLAGS="%{optflags} -fPIC -O3" \
-#    python3 setup.py install --root %{buildroot}
-CFLAGS="%{optflags} -fPIC -O3 -fno-lto" PYTHONDONTWRITEBYTECODE= python2 setup.py install --root=%{buildroot}
+CFLAGS="%{optflags} -fPIC -O3 -fno-lto" PYTHONDONTWRITEBYTECODE= %{__python2} setup.py install --root=%{buildroot}
 
 rm -rf %{buildroot}%{py2_platsitedir}/%{module}/__pycache__
 
@@ -146,11 +141,7 @@ find %{buildroot}%{py2_platsitedir} -name "*py" -perm 644 -exec sed -i '/#!\/usr
 popd
 
 pushd python3
-# skip-build currently broken, this works around it for now
-#env ATLAS=%{_libdir} FFTW=%{_libdir} BLAS=%{_libdir} \
-#    LAPACK=%{_libdir} CFLAGS="%{optflags} -fPIC -O3" \
-#    python setup.py install --root %{buildroot}
-CFLAGS="%{optflags} -fPIC -O3 -fno-lto" PYTHONDONTWRITEBYTECODE= python setup.py install --root=%{buildroot}
+CFLAGS="%{optflags} -fPIC -O3 -fno-lto" PYTHONDONTWRITEBYTECODE= %{__python3} setup.py install --root=%{buildroot}
 
 rm -rf %{buildroot}%{py3_platsitedir}/%{module}/tools/
 rm -rf %{buildroot}%{py3_platsitedir}/%{module}/__pycache__
@@ -168,7 +159,7 @@ popd
 %if %enable_tests
 # Don't run tests from within main directory to avoid importing the uninstalled numpy stuff:
 pushd doc &> /dev/null
-PYTHONPATH="%{buildroot}%{py2_platsitedir}" python2 -c "import pkg_resources, numpy; numpy.test()"
+PYTHONPATH="%{buildroot}%{py2_platsitedir}" %{__python2} -c "import pkg_resources, numpy; numpy.test()"
 popd &> /dev/null
 
 pushd doc &> /dev/null
@@ -237,4 +228,3 @@ popd &> /dev/null
 %{py2_platsitedir}/%{module}/core/lib/*.a
 %{py2_platsitedir}/%{module}/distutils/
 %{py2_platsitedir}/%{module}/random/randomkit.h
-
