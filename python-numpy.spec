@@ -1,8 +1,4 @@
-%define enable_atlas 0
-%{?_with_atlas: %global enable_atlas 1}
-
 %define module	numpy
-
 # disable this for bootstrapping nose and sphinx
 %define enable_tests 0
 %define enable_doc 0
@@ -19,13 +15,10 @@ Source0:	http://downloads.sourceforge.net/numpy/numpy-%{version}.tar.gz
 Patch0:		numpy-1.10.2-link.patch
 
 %rename	f2py
-%if %enable_atlas
+
 BuildRequires:	libatlas-devel
-%else
 BuildRequires:	blas-devel
-%endif
 BuildRequires:	lapack-devel
-BuildRequires:	libatlas-devel
 BuildRequires:	gcc-gfortran >= 4.0
 %if %enable_doc
 BuildRequires:	python-sphinx >= 1.0
@@ -36,6 +29,7 @@ BuildRequires:	python-nose
 %endif
 BuildRequires: python-cython
 BuildRequires: python-setuptools
+BuildRequires: python2-setuptools
 BuildRequires: pkgconfig(python3)
 BuildRequires: pkgconfig(python2)
 BuildRequires: python2-distribute
@@ -100,12 +94,6 @@ pushd python3
 %patch0 -p1
 rm numpy/distutils/command/__init__.py && touch numpy/distutils/command/__init__.py
 popd
-
-cat >> site.cfg <<EOF
-[atlas]
-library_dirs = %{_libdir}/atlas
-atlas_libs = satlas
-EOF
 
 %build
 %ifarch aarch64
@@ -191,19 +179,20 @@ popd &> /dev/null
 %{py_platsitedir}/%{module}/testing/
 %{py_platsitedir}/%{module}/tests/ 
 %{py_platsitedir}/%{module}-*.egg-info
+%{_bindir}/f2py3
+%{py_platsitedir}/%{module}/f2py/
 
 %files devel
-%{_bindir}/f2py
-%{_bindir}/f2py3
 %{py_platsitedir}/%{module}/core/include/
 %{py_platsitedir}/%{module}/core/lib/*.a
 %{py_platsitedir}/%{module}/distutils/
-%{py_platsitedir}/%{module}/f2py/
 %{py_platsitedir}/%{module}/random/randomkit.h
 
 %files -n python2-numpy
 %doc python2/LICENSE.txt python2/THANKS.txt python2/site.cfg.example
 %dir %{py2_platsitedir}/%{module}
+%{_bindir}/f2py2
+%{py2_platsitedir}/%{module}/f2py
 %{py2_platsitedir}/%{module}/*.py*
 %{py2_platsitedir}/%{module}/doc
 %{py2_platsitedir}/%{module}/core
@@ -223,8 +212,6 @@ popd &> /dev/null
 %{py2_platsitedir}/%{module}-*.egg-info
 
 %files -n python2-numpy-devel
-%{_bindir}/f2py2
-%{py2_platsitedir}/%{module}/f2py
 %{py2_platsitedir}/%{module}/core/include/
 %{py2_platsitedir}/%{module}/core/lib/*.a
 %{py2_platsitedir}/%{module}/distutils/
