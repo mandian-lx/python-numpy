@@ -10,7 +10,7 @@
 Summary:	A fast multidimensional array facility for Python
 Name:		python-%{module}
 Epoch:		1
-Version:	1.10.2
+Version:	1.11.0
 Release:	1
 License:	BSD
 Group:		Development/Python
@@ -177,7 +177,7 @@ popd &> /dev/null
 %endif
 
 %files 
-%doc python3/LICENSE.txt python3/README.txt python3/THANKS.txt python3/DEV_README.txt python3/COMPATIBILITY python3/site.cfg.example 
+%doc python3/LICENSE.txt python3/THANKS.txt python3/site.cfg.example 
 %if %enable_doc
 %doc python3/doc/build/html
 %endif
@@ -210,7 +210,7 @@ popd &> /dev/null
 %{py_platsitedir}/%{module}/random/randomkit.h
 
 %files -n python2-numpy
-%doc python2/LICENSE.txt python2/README.txt python2/THANKS.txt python2/DEV_README.txt python2/COMPATIBILITY python2/site.cfg.example
+%doc python2/LICENSE.txt python2/THANKS.txt python2/site.cfg.example
 %dir %{py2_platsitedir}/%{module}
 %{py2_platsitedir}/%{module}/*.py*
 %{py2_platsitedir}/%{module}/doc
