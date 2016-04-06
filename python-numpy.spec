@@ -25,6 +25,7 @@ BuildRequires:	libatlas-devel
 BuildRequires:	blas-devel
 %endif
 BuildRequires:	lapack-devel
+BuildRequires:	libatlas-devel
 BuildRequires:	gcc-gfortran >= 4.0
 %if %enable_doc
 BuildRequires:	python-sphinx >= 1.0
