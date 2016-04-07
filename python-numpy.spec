@@ -180,19 +180,18 @@ popd &> /dev/null
 %{py_platsitedir}/%{module}/tests/ 
 %{py_platsitedir}/%{module}-*.egg-info
 %{_bindir}/f2py3
-%{py_platsitedir}/%{module}/f2py/
 
 %files devel
 %{py_platsitedir}/%{module}/core/include/
 %{py_platsitedir}/%{module}/core/lib/*.a
 %{py_platsitedir}/%{module}/distutils/
 %{py_platsitedir}/%{module}/random/randomkit.h
+%{py_platsitedir}/%{module}/f2py/
 
 %files -n python2-numpy
 %doc python2/LICENSE.txt python2/THANKS.txt python2/site.cfg.example
 %dir %{py2_platsitedir}/%{module}
 %{_bindir}/f2py2
-%{py2_platsitedir}/%{module}/f2py
 %{py2_platsitedir}/%{module}/*.py*
 %{py2_platsitedir}/%{module}/doc
 %{py2_platsitedir}/%{module}/core
@@ -213,6 +212,7 @@ popd &> /dev/null
 
 %files -n python2-numpy-devel
 %{py2_platsitedir}/%{module}/core/include/
+%{py2_platsitedir}/%{module}/f2py
 %{py2_platsitedir}/%{module}/core/lib/*.a
 %{py2_platsitedir}/%{module}/distutils/
 %{py2_platsitedir}/%{module}/random/randomkit.h
