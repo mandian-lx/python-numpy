@@ -7,7 +7,7 @@ Summary:	A fast multidimensional array facility for Python
 Name:		python-%{module}
 Epoch:		1
 Version:	1.11.0
-Release:	1
+Release:	1.1
 License:	BSD
 Group:		Development/Python
 Url: 		http://numpy.scipy.org
@@ -16,7 +16,7 @@ Patch0:		numpy-1.10.2-link.patch
 
 %rename	f2py
 
-BuildRequires:	libatlas-devel
+#BuildRequires:	libatlas-devel
 BuildRequires:	blas-devel
 BuildRequires:	lapack-devel
 BuildRequires:	gcc-gfortran >= 4.0
