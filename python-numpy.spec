@@ -96,7 +96,8 @@ rm numpy/distutils/command/__init__.py && touch numpy/distutils/command/__init__
 popd
 
 %build
-%ifarch aarch64
+%ifarch i586
+# using clang on i586 results in "undefined reference to __mulodi4"
 export CC=gcc
 export CXX=g++
 %endif
