@@ -6,12 +6,12 @@
 Summary:	A fast multidimensional array facility for Python
 Name:		python-%{module}
 Epoch:		1
-Version:	1.11.0
-Release:	1.2
+Version:	1.12.1
+Release:	1
 License:	BSD
 Group:		Development/Python
 Url: 		http://numpy.scipy.org
-Source0:	http://downloads.sourceforge.net/numpy/numpy-%{version}.tar.gz
+Source0:	https://github.com/numpy/numpy/archive/v%{version}.tar.gz
 Patch0:		numpy-1.10.2-link.patch
 
 %rename	f2py
