@@ -16,9 +16,9 @@ Patch0:		numpy-1.10.2-link.patch
 
 %rename	f2py
 
-#BuildRequires:	pkgconfig(atlas)
-BuildRequires:	pkgconfig(blas)
-BuildRequires:	pkgconfig(lapack)
+BuildRequires:	pkgconfig(atlas)
+#BuildRequires:	pkgconfig(blas)
+#BuildRequires:	pkgconfig(lapack)
 BuildRequires:	gcc-gfortran >= 4.0
 
 BuildRequires:	pkgconfig(python3)
