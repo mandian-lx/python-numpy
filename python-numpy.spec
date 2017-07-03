@@ -27,7 +27,7 @@ BuildRequires:	pythonegg(setuptools)
 
 BuildRequires:	pkgconfig(python2)
 BuildRequires:	python2-cython
-BuildRequires:	python2egg(setuptools)
+BuildRequires:	pythonegg(setuptools)
 
 %if %enable_doc
 BuildRequires:	pythonegg(sphinx)
