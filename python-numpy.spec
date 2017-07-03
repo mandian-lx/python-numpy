@@ -23,7 +23,7 @@ BuildRequires:	gcc-gfortran >= 4.0
 
 BuildRequires:	pkgconfig(python3)
 BuildRequires:	python-cython
-BuildRequires:	pythonegg(setuptools)
+BuildRequires:	python3egg(setuptools)
 
 BuildRequires:	pkgconfig(python2)
 BuildRequires:	python2-cython
