@@ -1,4 +1,3 @@
-%define module	numpy
 # disable this for bootstrapping nose and sphinx
 %define enable_tests 0
 %define enable_doc 0
@@ -6,33 +5,38 @@
 Summary:	A fast multidimensional array facility for Python
 Name:		python-%{module}
 Epoch:		1
-Version:	1.12.1
+Version:	1.13.0
 Release:	1
 License:	BSD
 Group:		Development/Python
 Url: 		http://numpy.scipy.org
-Source0:	https://github.com/numpy/numpy/archive/v%{version}.tar.gz
+Source0:	https://github.com/numpy/numpy/archive/v%{version}/%{name}-%{version}.tar.gz
 Patch0:		numpy-1.10.2-link.patch
 
 %rename	f2py
 
-#BuildRequires:	libatlas-devel
-BuildRequires:	blas-devel
-BuildRequires:	lapack-devel
+#BuildRequires:	pkgconfig(atlas)
+BuildRequires:	pkgconfig(blas)
+BuildRequires:	pkgconfig(lapack)
 BuildRequires:	gcc-gfortran >= 4.0
+
+BuildRequires:	pkgconfig(python3)
+BuildRequires:	python-cython
+BuildRequires:	pythonegg(setuptools)
+
+BuildRequires:	pkgconfig(python2)
+BuildRequires:	python2-cython
+BuildRequires:	python2egg(setuptools)
+
 %if %enable_doc
-BuildRequires:	python-sphinx >= 1.0
-BuildRequires:	python-matplotlib
-%endif
+BuildRequires:	pythonegg(sphinx)
+BuildRequires:	pythonegg(matplotlib)
+%endif	
+
 %if %enable_tests
-BuildRequires:	python-nose
+BuildRequires:	python3egg(nose)
+BuildRequires:	pythonegg(nose)
 %endif
-BuildRequires: python-cython
-BuildRequires: python-setuptools
-BuildRequires: python2-setuptools
-BuildRequires: pkgconfig(python3)
-BuildRequires: pkgconfig(python2)
-BuildRequires: python2-distribute
 
 %description
 Numpy is a general-purpose array-processing package designed to
@@ -83,6 +87,7 @@ in C and Fortran that can interact with Numpy.
 %setup -qc
 mv %{module}-%{version} python2
 cp -a python2 python3
+
 pushd python2
 %patch0 -p1
 # workaround for rhbz#849713
@@ -101,6 +106,7 @@ popd
 export CC=gcc
 export CXX=g++
 %endif
+
 pushd python3
 CFLAGS="%{optflags} -fPIC -O3 -fno-lto" PYTHONDONTWRITEBYTECODE= %{__python3} setup.py config_fc --fcompiler=gnu95 build
 popd
