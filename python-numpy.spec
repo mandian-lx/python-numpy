@@ -1,3 +1,4 @@
+%define module numpy
 # disable this for bootstrapping nose and sphinx
 %define enable_tests 0
 %define enable_doc 0
